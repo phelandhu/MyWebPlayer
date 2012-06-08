@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svnroot/mywebplayer/!svn/ver/65/sh
+END
+.htaccess
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svnroot/mywebplayer/!svn/ver/1/sh/.htaccess
+END
+fifo.sh
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svnroot/mywebplayer/!svn/ver/65/sh/fifo.sh
+END
