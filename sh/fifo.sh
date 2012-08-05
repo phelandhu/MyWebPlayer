@@ -45,11 +45,10 @@ start_mplayer ()
 if [ "`ps ax | grep mplayer| grep fifo`" = '' ]; then
 		if [ `uname` != 'Linux' ]; then
 #			mplayer -msglevel all=-1 -idx -zoom -slave -quiet -idle -input file=$fifo > $log < /dev/null &
-#			mplayer -msglevel all=-1 -idx -zoom -slave -quiet -idle -input file=$fifo > $log &
-                        mplayer -msglevel all=-1 -idx -zoom -slave -quiet -idle -input file=$fifo > $log 2>&1
+			mplayer -msglevel all=-1 -idx -zoom -slave -v -v -v -idle -input file=$fifo > tmp/mplayer1.log &
 		else
-#	          DISPLAY=:`ls -1 /tmp/.X11-unix/|tail -n 1|sed s/X//` mplayer -msglevel all=-1 -idx -zoom -slave -quiet -idle -input file=$fifo > $log < /dev/null  &
-		DISPLAY=:`ls -1 /tmp/.X11-unix/|tail -n 1|sed s/X//` mplayer -msglevel all=-1 -idx -zoom -slave -quiet -idle -input file=$fifo > $log 2>&1
+#			DISPLAY=:`ls -1 /tmp/.X11-unix/|tail -n 1|sed s/X//` mplayer -msglevel all=-1 -idx -zoom -slave -quiet -idle -input file=$fifo > $log < /dev/null  &
+			DISPLAY=:`ls -1 /tmp/.X11-unix/|tail -n 1|sed s/X//` mplayer -msglevel all=-1 -idx -zoom -slave -idle -input file=$fifo > tmp/mplayer2.log &
 		fi
 	
 		echo "Mplayer started"
@@ -119,6 +118,7 @@ start)
 		fi
         done&
         echo -e "\033[32m\033[1A\033[40C [OK] \033[0m"
+	echo "done"
 
 ;;
 stop)
@@ -143,3 +143,4 @@ echo
 echo -e "\033[31m * \033[0m" "Usage: fifo.sh { start|stop|status } "
 	
 esac
+

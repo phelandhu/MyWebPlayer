@@ -9,28 +9,43 @@ function parseCommandLine($argv) {
 	}
 	return $args;
 }
-$outout=null;
-$get_output=null;
+/*
 	ob_start(); //Start buffering
 	print_r($argv); //print the result
 	$output = ob_get_contents(); //get the result from buffer
 	ob_end_clean();
-/*
+
 	ob_start(); //Start buffering
 	print_r($_GET); //print the result
 	$get_output = ob_get_contents(); //get the result from buffer
 	ob_end_clean();
-*/
-	
-file_put_contents ( "/tmp/log.txt", file_get_contents ( "/tmp/log.txt") . date("Y/m/d-H:i:s") . ":\n" . $output . $get_output . "random test\n");
 
+	
+file_put_contents ( "/tmp/logInputGet.txt", file_get_contents ( "/tmp/logInputGet.txt") . $output . "\n" . $get_output . "random test");
+*/
+
+if(isset($_GET)&&!isset($argv)) {
+	$argv = $_GET;
+}
+/*
+	ob_start(); //Start buffering
+	print_r($argv); //print the result
+	$output = ob_get_contents(); //get the result from buffer
+	ob_end_clean();
+file_put_contents ( "/tmp/logInputArg.txt", file_get_contents ( "/tmp/logInputArg.txt") . $output . "\nrandom test\n");
+*/	
 $myfiles=exec('pwd');
 $commandLineArgs = parseCommandLine($argv);
+	ob_start(); //Start buffering
+	print_r($commandLineArgs); //print the result
+	$output = ob_get_contents(); //get the result from buffer
+	ob_end_clean();
+	file_put_contents ( "/tmp/log.txt", file_get_contents ( "/tmp/log.txt") . $output . "\nrandom test\n");
 $action=urldecode($commandLineArgs["action"]);
 $file=urldecode($commandLineArgs["file"]);
 
 $fifo = "$myfiles/sh/tmp/mplayer.fifo";
-//echo $fifo . "\n";
+echo $fifo . "\n";
 
 if ($action == '') {
 	$action=$_GET['action'];
@@ -54,9 +69,7 @@ $allowed_commands = array(
 	'panscan +0.1',
 	'panscan -0.1',
 	'pt_step +1',
-	'pt_step -1', 
-	'seek_chapter +1',
-	'seek_chapter -1'
+	'pt_step -1'
 );
 
 foreach($allowed_commands as $value) {

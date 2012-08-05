@@ -181,6 +181,5 @@ if ($debug_frame == '1') {
 ?>
 </td></tr></table>
 <iframe frameborder="<? echo $debug_frame; ?>" border="<? echo $debug_frame; ?>" name="nullframe" value="common.php" width="<? echo $debug_width ?>" height="<? echo $debug_height ?>">
-</iframe>
 </body>
 </html>
