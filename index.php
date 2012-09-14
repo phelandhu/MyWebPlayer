@@ -16,7 +16,9 @@ $submit='id=submit type=submit name="action"';
 	select { width: <? echo $screen_width; ?>px; }
 	#submit { background-color: transparent; border: 0px; }
 </style>
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 	$(document).ready(function(){
 /*
@@ -25,6 +27,8 @@ $submit='id=submit type=submit name="action"';
 			alert("Data Loaded: Nothing");
 			 });
 */		
+		$("#slider").slider();
+		$( ".selector" ).slider({ max: 7 });
 		var request = $("a").click(function(event){
 	     $.ajax({
 	    	  url: "test.php",
@@ -39,6 +43,9 @@ $submit='id=submit type=submit name="action"';
 		})
 		 
 	   });
+		$("#target").click(function() {
+			  alert("Handler for .click() called.");
+		});
 	 });
 
 	addEventListener('load', function() {
@@ -53,12 +60,15 @@ $submit='id=submit type=submit name="action"';
 
 	Array.prototype.next = function () {if (this.n == undefined || this.n >= this.length) this.n = 0; return this[this.n++]}
 	button = ['mute 1', 'mute 0'];
+
+
 </script>
 
 </head>
 
 <body>
 <a href="">jQuery Test</a>
+
 <form action="common.php" method="get" target="nullframe" name="mplayer">
 <table id="buttons">
 <?
@@ -169,6 +179,7 @@ else if ($buttons_type=="buttons") {
 	}
 */
 ?>
+<div id="slider"></div>
 </form>
 <?
 if ($debug_frame == '1') {
