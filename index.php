@@ -1,4 +1,12 @@
 <?php
+/***********************************************
+* Created:            Thu 06 Sep 2012 10:10:28 AM PDT 
+* Last Modified:      Thu 06 Sep 2012 10:10:28 AM PDT
+*
+* The Index page of my hom emusic player, trying to implement AJAX and not have it make the round trip back to the server
+*
+* Mike Browne - phelandhu@gmail.com
+***********************************************/
 include "config.php";
 include "functions.php";
 $submit='id=submit type=submit name="action"';
@@ -21,36 +29,98 @@ $submit='id=submit type=submit name="action"';
 	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 	$(document).ready(function(){
-/*
-		$.post("test.php", function(data) {
-//			   alert("Data Loaded: " + data);
-			alert("Data Loaded: Nothing");
-			 });
-*/		
+		var tid = setInterval(ajaxUpdateUI, 2000);
+	
 		$("#slider").slider();
 		$( ".selector" ).slider({ max: 7 });
 		var request = $("a").click(function(event){
-	     $.ajax({
-	    	  url: "test.php",
-	    	  type: "POST"
-	 	  });
-
-		 request.done(function(msg) {
-			 alert("Data Loaded: " + msg );
-		 });
-		$.post("test.php", function(data) {
-			alert("Data Loaded: " + data);
-		})
-		 
-	   });
-		$("#target").click(function() {
-			  alert("Handler for .click() called.");
+	     	$.ajax({
+				url: "test.php",
+				type: "POST"
+	 	  	});
+	
+			request.done(function(msg) {
+				alert("Data Loaded: " + msg );
+			});
+			$.post("test.php", function(data) {
+				alert("Data Loaded: " + data);
+			})
 		});
+
+		$("#btnBackOne, #btnBackJump, #btnForeJump, #btnForeOne, #btnPause, #btnPlay, #btnStop, #btnVolUp, #btnMuteVol, #btnVolDn").click(function() {
+			handleClick(this);
+		});
+
 	 });
 
 	addEventListener('load', function() {
 		setTimeout(hideAddressBar, 0);
 	}, false);
+
+	function handleClick(btnObject) {
+		var file = $("#fileSelection").val();
+//alert("test");
+		switch(btnObject.id) {
+			case "btnBackOne":
+				ajaxUpdatePlayer("pt_step-1", file);
+				break;
+			case "btnBackJump":
+				ajaxUpdatePlayer("seek-15", file);
+				break;
+			case "btnForeJump":
+				ajaxUpdatePlayer("seek+15", file);
+				break;
+			case "btnForeOne":
+				ajaxUpdatePlayer("pt_step+1", file);
+				break;
+			case "btnPause":
+				ajaxUpdatePlayer("pause", file);
+				break;
+			case "btnPlay":
+				ajaxUpdatePlayer("loadlist", file);
+				break;
+			case "btnStop":
+				ajaxUpdatePlayer("quit", file);
+				break;
+			case "btnVolUp":
+				ajaxUpdatePlayer("volume-1", file);
+				break;
+			case "btnMuteVol":
+				if(btnObject.value == "mute 1") {
+					ajaxUpdatePlayer("mute1", file);
+				} else {
+					ajaxUpdatePlayer("mute0", file);
+				}
+				
+				break;
+			case "btnVolDn":
+				ajaxUpdatePlayer("volume+1", file);
+				break;
+			default:
+				strText = "Default";
+				break;			
+		}
+	}
+
+	function ajaxUpdateUI(){ 
+		$("#update_user").show(); 
+		var search_val=$("#search_term").val(); 
+		$.post("./ajax.php?method=updateUI&action=updateUI&file=test", {search_term : search_val}, function(data){
+			if (data.length>0){ 
+				$("#update_user").html(data); 
+			}
+		})
+	} 
+
+	function ajaxUpdatePlayer(action, file){ 
+		$("#update_user").show();
+		var toPost = "./ajax.php?method=updatePlayer&action=" + action +"&file=" + file;
+		$.post(toPost, function(data){
+			if (data.length>0){ 
+				$("#update_user").html(data); 
+			}
+		})
+	} 
 
 	function hideAddressBar() {
 		window.scrollTo(0, 1);
@@ -60,16 +130,11 @@ $submit='id=submit type=submit name="action"';
 
 	Array.prototype.next = function () {if (this.n == undefined || this.n >= this.length) this.n = 0; return this[this.n++]}
 	button = ['mute 1', 'mute 0'];
-
-
 </script>
 
 </head>
 
 <body>
-<a href="">jQuery Test</a>
-
-<form action="common.php" method="get" target="nullframe" name="mplayer">
 <table id="buttons">
 <?
 switch($buttons_type) {
@@ -78,38 +143,39 @@ switch($buttons_type) {
 		<tbody>
 			<tr>
 				<td width=\"25%\" align=\"left\">
-					<button " . $submit . " value=\"pt_step -1\" " . $event_start . "=\"document.images[0].src='images/" . $skin . "/skip_bck_pshd.png';\" " . $event_stop . "=\"document.images[0].src='images/" . $skin . "/skip_bck.png';\"><img src=\"images/" . $skin . "/skip_bck.png\" width=" . $button_width . " height=" . $button_height . "></button>
+					<button id='btnBackOne' " . $event_start . "=\"document.images[0].src='images/" . $skin . "/skip_bck_pshd.png';\" " . $event_stop . "=\"document.images[0].src='images/" . $skin . "/skip_bck.png';\"><img src=\"images/" . $skin . "/skip_bck.png\" width=" . $button_width . " height=" . $button_height . "></button>
 				</td>
 				<td width=\"25%\" align=\"left\">
-					<button " . $submit . " value=\"seek -15\" " . $event_start . "=\"document.images[0].src='images/" . $skin . "/rr_pshd.png';\" " . $event_stop . "=\"document.images[0].src='images/" . $skin . "/rr.png';\"><img src=\"images/" . $skin . "/rr.png\" width=" . $button_width . " height=" . $button_height . "></button>
+					<button id='btnBackJump' " . $event_start . "=\"document.images[0].src='images/" . $skin . "/rr_pshd.png';\" " . $event_stop . "=\"document.images[0].src='images/" . $skin . "/rr.png';\"><img src=\"images/" . $skin . "/rr.png\" width=" . $button_width . " height=" . $button_height . "></button>
 				</td>
 				<td width=\"25%\" align=\"center\">
-					<button " . $submit . " value=\"seek +15\" " . $event_start . "=\"document.images[2].src='images/" . $skin . "/ff_pshd.png';\" " . $event_stop . "=\"document.images[2].src='images/" . $skin . "/ff.png';\"><img src=\"images/" . $skin . "/ff.png\" width=" . $button_width . " height=" . $button_height . "></button>
+					<button id='btnForeJump' " . $event_start . "=\"document.images[2].src='images/" . $skin . "/ff_pshd.png';\" " . $event_stop . "=\"document.images[2].src='images/" . $skin . "/ff.png';\"><img src=\"images/" . $skin . "/ff.png\" width=" . $button_width . " height=" . $button_height . "></button>
 				</td>
 				<td width=\"25%\" align=\"center\">
-					<button " . $submit . " value=\"pt_step +1\" " . $event_start . "=\"document.images[2].src='images/" . $skin . "/skip_fwd_pshd.png';\" " . $event_stop . "=\"document.images[2].src='images/" . $skin . "/skip_fwd.png';\"><img src=\"images/" . $skin . "/skip_fwd.png\" width=" . $button_width . " height=" . $button_height . "></button>
+					<button id='btnForeOne' " . $event_start . "=\"document.images[2].src='images/" . $skin . "/skip_fwd_pshd.png';\" " . $event_stop . "=\"document.images[2].src='images/" . $skin . "/skip_fwd.png';\"><img src=\"images/" . $skin . "/skip_fwd.png\" width=" . $button_width . " height=" . $button_height . "></button>
 				</td>
-			</tr>			
+			</tr>	
 			<tr>
 				<td width=\"25%\" align=\"left\">
-					<button " . $submit . " value=\"pause\" " . $event_start . "=\"document.images[3].src='images/" . $skin . "/pause_pshd.png';\" " . $event_stop . "=\"document.images[3].src='images/" . $skin . "/pause.png';\"><img src=\"images/" . $skin . "/pause.png\" width=" . $button_width . " height=" . $button_height . "></button>
+					<button id='btnPause' " . $event_start . "=\"document.images[3].src='images/" . $skin . "/pause_pshd.png';\" " . $event_stop . "=\"document.images[3].src='images/" . $skin . "/pause.png';\"><img src=\"images/" . $skin . "/pause.png\" width=" . $button_width . " height=" . $button_height . "></button>
 				</td>
 				<td width=\"50%\" align=\"center\" colspan=2>
-					<button " . $submit . " value=\"load$cont_type\" " . $event_start . "=\"document.images[1].src='images/" . $skin . "/play_pshd.png';\" " . $event_stop . "=\"document.images[1].src='images/" . $skin . "/play.png';\"><img src=\"images/" . $skin . "/play.png\" width=" . $button_width . "*2 height=" . $button_height . "></button>
+					<button id='btnPlay' " . $event_start . "=\"document.images[1].src='images/" . $skin . "/play_pshd.png';\" " . $event_stop . "=\"document.images[1].src='images/" . $skin . "/play.png';\"><img src=\"images/" . $skin . "/play.png\" width=" . $button_width . "*2 height=" . $button_height . "></button>
 				</td>
 				<td width=\"25%\" align=\"right\">
-					<button " . $submit . " value=\"quit\" " . $event_start . "=\"document.images[4].src='images/" . $skin . "/stop_pshd.png';\" " . $event_stop . "=\"document.images[4].src='images/" . $skin . "/stop.png';\"><img src=\"images/" . $skin . "/stop.png\" width=" . $button_width . " height=" . $button_height . "></button>
+					<button id='btnStop' " . $event_start . "=\"document.images[4].src='images/" . $skin . "/stop_pshd.png';\" " . $event_stop . "=\"document.images[4].src='images/" . $skin . "/stop.png';\"><img src=\"images/" . $skin . "/stop.png\" width=" . $button_width . " height=" . $button_height . "></button>
 				</td>
 			</tr>
+	
 			<tr>
 				<td width=\"25%\" align=\"center\">
-					<button " . $submit . " value=\"volume -1\" " . $event_start . "=\"document.images[5].src='images/" . $skin . "/voldown_pshd.png';\" " . $event_stop . "=\"document.images[5].src='images/" . $skin . "/voldown.png';\"><img src=\"images/" . $skin . "/voldown.png\" width=" . $button_width . " height=" . $button_height . "></button>
+					<button id='btnVolUp' " . $event_start . "=\"document.images[5].src='images/" . $skin . "/voldown_pshd.png';\" " . $event_stop . "=\"document.images[5].src='images/" . $skin . "/voldown.png';\"><img src=\"images/" . $skin . "/voldown.png\" width=" . $button_width . " height=" . $button_height . "></button>
 				</td>
 				<td width=\"50%\" align=\"center\" colspan=2>
-					<button " . $submit . " value=\"mute 0\" onclick=\"if(this.value=='mute 1') { this.value='mute 0'; } else { this.value='mute 1'; };\" " . $event_start . "=\"document.images[6].src='images/" . $skin . "/mute_pshd.png';\" " . $event_stop . "=\"document.images[6].src='images/" . $skin . "/mute.png';\"><img src=\"images/" . $skin . "/mute.png\" width=" . $button_width . " height=" . $button_height . "></button>
+					<button id='btnMuteVol' value=\"mute 0\" onclick=\"if(this.value=='mute 1') { this.value='mute 0'; } else { this.value='mute 1'; };\" " . $event_start . "=\"document.images[6].src='images/" . $skin . "/mute_pshd.png';\" " . $event_stop . "=\"document.images[6].src='images/" . $skin . "/mute.png';\"><img src=\"images/" . $skin . "/mute.png\" width=" . $button_width . " height=" . $button_height . "></button>
 				</td>
 				<td width=\"25%\" align=\"right\">
-					<button " . $submit . " value=\"volume +1\" " . $event_start . "=\"document.images[7].src='images/" . $skin . "/volup_pshd.png';\" " . $event_stop . "=\"document.images[7].src='images/" . $skin . "/volup.png';\"><img src=\"images/" . $skin . "/volup.png\" width=" . $button_width . " height=" . $button_height . "></button>
+					<button id='btnVolDn' " . $event_start . "=\"document.images[7].src='images/" . $skin . "/volup_pshd.png';\" " . $event_stop . "=\"document.images[7].src='images/" . $skin . "/volup.png';\"><img src=\"images/" . $skin . "/volup.png\" width=" . $button_width . " height=" . $button_height . "></button>
 				</td>
 			</tr>
 	</tbody>";
@@ -154,8 +220,7 @@ switch($buttons_type) {
 <table border="0"  align="center">
 <tr><td>
 
-
-<select name="file">
+<select id="fileSelection" name="file">
 <?php
 	$mass=scanDirectories($rootDir);
 	$mass=show_all_masks($mass, $mask);
@@ -180,7 +245,7 @@ else if ($buttons_type=="buttons") {
 */
 ?>
 <div id="slider"></div>
-</form>
+<div id="update_user"></div>
 <?
 if ($debug_frame == '1') {
 	$debug_width = $screen_width * 3;

@@ -1,6 +1,7 @@
 #!/bin/bash
 myfiles=`pwd`;
 fifo=${myfiles}/tmp/mplayer.fifo
+outfifo=${myfiles}/tmp/mplayerout.fifo
 log=${myfiles}/tmp/mplayer.log
 pid=${myfiles}/tmp/mplayer.pid
 webpid=${myfiles}/tmp/mplayerweb.pid
@@ -45,7 +46,7 @@ start_mplayer ()
 if [ "`ps ax | grep mplayer| grep fifo`" = '' ]; then
 		if [ `uname` != 'Linux' ]; then
 #			mplayer -msglevel all=-1 -idx -zoom -slave -quiet -idle -input file=$fifo > $log < /dev/null &
-			mplayer -msglevel all=-1 -idx -zoom -slave -v -v -v -idle -input file=$fifo > tmp/mplayer1.log &
+			mplayer -msglevel all=-1 -idx -zoom -slave -v -v -v -idle -input file=$fifo > $outfifo &
 		else
 #			DISPLAY=:`ls -1 /tmp/.X11-unix/|tail -n 1|sed s/X//` mplayer -msglevel all=-1 -idx -zoom -slave -quiet -idle -input file=$fifo > $log < /dev/null  &
 			DISPLAY=:`ls -1 /tmp/.X11-unix/|tail -n 1|sed s/X//` mplayer -msglevel all=-1 -idx -zoom -slave -idle -input file=$fifo > tmp/mplayer2.log &
@@ -103,7 +104,7 @@ start)
 	echo "Open it in browser";
 	echo "";
 
-	start_mplayer
+	#start_mplayer
 
         echo "daemonizing";   
 

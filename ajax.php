@@ -8,77 +8,34 @@
 *
 * Mike Browne - phelandhu@gmail.com
 ***********************************************/
-include_once("Util.php");
-include_once("MplayerControl.php");
+include_once("class/Util.class.php");
+include_once("class/MplayerControl.class.php");
+include_once("class/AjaxFunctions.class.php");
 // read in from the url
-
-// call the common.php with the parameters as command line arguments
-
-class AjaxFunctions {
-	function updateUI() {
-		$strOut = "";
-		switch(rand(1,10)) {
-			case 1:
-				$strOut = "Hello, world";
-				break;
-			case 2:
-				$strOut = "Hi there";
-				break;
-			case 3:
-				$strOut = "Hakuna";
-				break;
-			case 4:
-				$strOut = "Matata";
-				break;
-			case 5:
-				$strOut = "Five";
-				break;
-			case 6:
-				$strOut = "Four";
-				break;
-			case 7:
-				$strOut = "Three";
-				break;
-			case 8:
-				$strOut = "Two";
-				break;
-			case 9:
-				$strOut = "One";
-				break;
-			case 10:
-				$strOut = "Blast off!";
-				break;
-		}
-		echo $strOut;
-	}
-	
-	function updatePlayer($action, $file) {
-		//echo "Test2<br>";
-		$mplayerControl = new MplayerControl(exec('pwd'), "/sh/tmp/mplayer.fifo");
-
-		$mplayerControl->sendCommand($action, " ");
-		
-		//echo "Command successful";
-		
-	}
-
-}
+$mplayerControl = new MplayerControl(exec('pwd'), "/sh/tmp/mplayer.fifo");
 
 $commandLineArgs = Util::parseCommandLine($argv);
-Util::logArray($commandLineArgs);
+//Util::logArray($commandLineArgs);
 if(isset($commandLineArgs["method"])) {
-	$ajaxFunctions = new AjaxFunctions();
+	$ajaxFunctions = new AjaxFunctions($mplayerControl);
 	switch ($commandLineArgs["method"]) {
 		case "updateUI":
-			$ajaxFunctions->updateUI();
+			echo $ajaxFunctions->updateUI();
 			break;
 		case "updatePlayer":
-			$ajaxFunctions->updatePlayer(urldecode($commandLineArgs["action"]), urldecode($commandLineArgs["file"]));
+			$action = $ajaxFunctions->convertCommand($commandLineArgs["action"]);
+			$response = $ajaxFunctions->updatePlayer($action, urldecode($commandLineArgs["file"]));
+			$result = substr($response, 0, 4);
+			if($result == "done") {
+				echo $result;
+			} else if(substr($result, 0, 3) == "Err") {
+				echo "An Error occured check the error log for the message";
+				Util::log($response);
+			}
 			break;
 		default:
 			break;
 	}
-	
 } else {
 	echo "Test5";
 	//header('Location: /index.php');
