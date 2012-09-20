@@ -1,15 +1,16 @@
 <?php
 /***********************************************
 * Created:            Thu 06 Sep 2012 10:10:28 AM PDT 
-* Last Modified:      Thu 06 Sep 2012 10:10:28 AM PDT
+* Last Modified:      Mon 17 Sep 2012 11:15:56 AM PDT
 *
-* The Index page of my hom emusic player, trying to implement AJAX and not have it make the round trip back to the server
+* The Index page of my home music player, trying to implement AJAX and not have it make the round trip back to the server
 *
 * Mike Browne - phelandhu@gmail.com
 ***********************************************/
 include "config.php";
-include "functions.php";
+include "class/DisplayFunctions.class.php";
 $submit='id=submit type=submit name="action"';
+$displayFunctions = new DisplayFunctions();
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html><head>
@@ -31,8 +32,15 @@ $submit='id=submit type=submit name="action"';
 	$(document).ready(function(){
 		var tid = setInterval(ajaxUpdateUI, 2000);
 	
-		$("#slider").slider();
-		$( ".selector" ).slider({ max: 7 });
+		$("#slider").slider({ 
+			max: 100,
+			step: 5,
+			value: 35,
+			change: function(event, ui) {
+				ajaxSetVolume(ui.value);
+			}
+		});
+
 		var request = $("a").click(function(event){
 	     	$.ajax({
 				url: "test.php",
@@ -91,7 +99,6 @@ $submit='id=submit type=submit name="action"';
 				} else {
 					ajaxUpdatePlayer("mute0", file);
 				}
-				
 				break;
 			case "btnVolDn":
 				ajaxUpdatePlayer("volume+1", file);
@@ -109,7 +116,7 @@ $submit='id=submit type=submit name="action"';
 			if (data.length>0){ 
 				$("#update_user").html(data); 
 			}
-		})
+		});
 	} 
 
 	function ajaxUpdatePlayer(action, file){ 
@@ -119,8 +126,29 @@ $submit='id=submit type=submit name="action"';
 			if (data.length>0){ 
 				$("#update_user").html(data); 
 			}
-		})
+		});
 	} 
+
+	function ajaxSetVolume(volume) {
+		$("#update_user").html(volume + "%");
+		$("#update_user").show();
+		var toPost = "./ajax.php?method=setVolume&volume=" + volume +"&file=#";
+		$.post(toPost, function(data){
+			if (data.length>0){ 
+				$("#update_user").html(data); 
+			}
+		});
+	}
+
+	function ajaxGetVolume(volume) {
+		$("#update_user").show();
+		var toPost = "./ajax.php?method=getVolume&para1=#&para2=#";
+		$.post(toPost, function(data){
+			if (data.length>0){ 
+				$("#update_user").html(data); 
+			}
+		});
+	}
 
 	function hideAddressBar() {
 		window.scrollTo(0, 1);
@@ -219,14 +247,16 @@ switch($buttons_type) {
 </table>
 <table border="0"  align="center">
 <tr><td>
-
+<?php 
+$dirList=$displayFunctions->scanDirectories($rootDir);
+$mass=$displayFunctions->show_all_masks($dirList, $mask);
+?>
 <select id="fileSelection" name="file">
 <?php
-	$mass=scanDirectories($rootDir);
-	$mass=show_all_masks($mass, $mask);
+	echo $mass;
 ?>
-
 </select>
+
 </td></tr><tr><td align="center">
 <?php
 /*
@@ -256,6 +286,8 @@ if ($debug_frame == '1') {
 }
 ?>
 </td></tr></table>
+<!-- 
 <iframe frameborder="<? echo $debug_frame; ?>" border="<? echo $debug_frame; ?>" name="nullframe" value="common.php" width="<? echo $debug_width ?>" height="<? echo $debug_height ?>">
+-->
 </body>
 </html>

@@ -23,6 +23,17 @@ class AjaxFunctions {
 		return $result;
 	}
 
+	function getVolume() {
+//		$result = $this->_mplayerControl->getVolume();
+$result = 50;
+		return $result;
+	}
+	
+	function setVolume($volume) {
+		$result = $this->_mplayerControl->setVolume($volume);
+		return $result;
+	}
+
 	function convertCommand($pageCommand) {
 		$mplayerCommand = "";
 		if(in_array($pageCommand, $this->nonConverted)) {

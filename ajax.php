@@ -33,6 +33,14 @@ if(isset($commandLineArgs["method"])) {
 				Util::log($response);
 			}
 			break;
+		case "setVolume":
+			$response = $ajaxFunctions->setVolume($commandLineArgs["volume"]);
+			echo "Volume set to " . $commandLineArgs["volume"] . "%";
+			break;
+		case "getVolume":
+			$response = $ajaxFunctions->getVolume();
+			echo "Volume set to " . $commandLineArgs["volume"] . "%";
+			break;			
 		default:
 			break;
 	}

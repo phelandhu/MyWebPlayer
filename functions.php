@@ -1,5 +1,6 @@
 <?php
 function scanDirectories($rootDir, $allData=array()) {
+	$alldata = null;
 	$invisibleFileNames = array(".", "..");
 	$dirContent = scandir($rootDir);
 	foreach($dirContent as $key => $content) {
@@ -17,8 +18,9 @@ function scanDirectories($rootDir, $allData=array()) {
 
 
 function get_filename($str) {
-	$str=substr(strrchr($str, "/"), 1);
-	return $str;
+	$strResult = null;
+	$strResult=substr(strrchr($str, "/"), 1);
+	return $strResult;
 }
 
 function show_by_mask($mass, $mask=array()){

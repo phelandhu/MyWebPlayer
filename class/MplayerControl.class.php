@@ -65,8 +65,23 @@ class MplayerControl{
 			return $result;
 			exit;
 		}
-		$tmp=$action . " \"" . $file . "\"\n";
-		$response = $this->sendCommandToPlayer($tmp);
+		$command=$action . " \"" . $file . "\"\n";
+		$response = $this->sendCommandToPlayer($command);
+		return $response;
+	}
+
+	public function getVolume() {
+		$response = null;
+		$response = 50;
+		return $response;
+	}
+	
+	public function setVolume($volume) {
+		$response = null;
+		//"volume " . $volume . ", 1", " \n"
+//		$command = $this->action . " \"" . $this->file . "\"\n";
+		$command="volume " . $volume . ", 1 \" \"\n";
+		$response = $this->sendCommandToPlayer($command);
 		return $response;
 	}
 	

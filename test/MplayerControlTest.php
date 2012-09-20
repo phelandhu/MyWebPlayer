@@ -19,27 +19,37 @@ class MplayerControlTest extends PHPUnit_Framework_TestCase
 	{
 		unset($this->_mplayerControl);
 	}
+
+	public function testSendCommandToPlayer() {
+		$this->action = "volume 10, 1";
+/*		$command = $this->action . " \"" . $this->file . "\"\n";
+		//$command = "quit\n";
+		echo $this->_mplayerControl->sendCommandToPlayer($command);
+		echo $this->_mplayerControl->sendCommandToPlayer($command);
+		echo $this->_mplayerControl->sendCommandToPlayer($command);
+		echo $this->_mplayerControl->sendCommandToPlayer($command);
+		echo $this->_mplayerControl->sendCommandToPlayer($command);
+		echo $this->_mplayerControl->sendCommandToPlayer($command);
+		echo $this->_mplayerControl->sendCommandToPlayer($command);
+*/
+	}
+
 /*
 	public function testSendCommand() {
 		echo $this->_mplayerControl->sendCommand($this->action, $this->file);
 	}
-*/	
-	public function testSendCommandToPlayer() {
-		$this->action = "volume +1";
-		$command = $this->action . " \"" . $this->file . "\"\n";
-		$command = "quit\n";
-		echo $this->_mplayerControl->sendCommandToPlayer($command);
-		echo $this->_mplayerControl->sendCommandToPlayer($command);
-		echo $this->_mplayerControl->sendCommandToPlayer($command);
-		echo $this->_mplayerControl->sendCommandToPlayer($command);
-		echo $this->_mplayerControl->sendCommandToPlayer($command);
-		echo $this->_mplayerControl->sendCommandToPlayer($command);
-		echo $this->_mplayerControl->sendCommandToPlayer($command);
+*/		
+	public function testGetVolume() {
+		$this->assertEquals(50, $this->_mplayerControl->getVolume());
+	}
+/*	
+	public function testSetVolume() {
+		$this->_mplayerControl->setVolume(50);	
 	}
 	
 	public function testQueryPlayer() {
 		echo $this->_mplayerControl->queryPlayer();
 	}
-	
+*/
 
 }

@@ -21,13 +21,26 @@ class AjaxFunctionsTest extends PHPUnit_Framework_TestCase
 		unset($this->_mplayerControl);
 	}
 
-	public function testUpdatePlayer() {
-		$action = "loadlist";
-		$file = "/x/playlists/a_perfect_circle-mer_de_noms.m3u";
-		$this->_ajaxFunctions->updatePlayer($action, $file);
-	}
-	
 	public function testUpdateUI() {
 		echo $this->_ajaxFunctions->updateUI();
 	}
+
+	public function testUpdatePlayer() {
+		$action = "loadlist";
+		$file = "/x/playlists/a_perfect_circle-mer_de_noms.m3u";
+		//		$this->_ajaxFunctions->updatePlayer($action, $file);
+	}
+	
+	public function testGetVolume() {
+		$this->assertEquals(50, $this->_ajaxFunctions->getVolume());
+	}
+
+	public function testSetVolume() {
+		echo $this->_ajaxFunctions->setVolume(50);
+	}
+/*	
+	public function testConvertCommand() {
+		$this->assertEquals("pt_step -1", $this->_ajaxFunctions->convertCommand("pt_step-1"));
+	}
+*/
 }
