@@ -1,12 +1,25 @@
 <?php
 /***********************************************
 * Created:            Thu 06 Sep 2012 10:10:28 AM PDT 
-* Last Modified:      Mon 17 Sep 2012 11:15:56 AM PDT
+* Last Modified:      Thu 20 Sep 2012 04:34:32 PM PDT
 *
 * The Index page of my home music player, trying to implement AJAX and not have it make the round trip back to the server
 *
 * Mike Browne - phelandhu@gmail.com
 ***********************************************/
+$port = 5912;
+// iPhone Version:
+if(strpos($_SERVER['HTTP_USER_AGENT'],'iPhone') !== FALSE || strpos($_SERVER['HTTP_USER_AGENT'],'iPod') !== FALSE)
+{
+  header("Location: http://www.scoundrel-for-hire.com:" . $port . "/m.index.php");
+  exit();
+}
+// Android Version:
+if(strpos($_SERVER['HTTP_USER_AGENT'],'Android') !== FALSE)
+{
+  header("Location: http://www.scoundrel-for-hire.com:" . $port . "/m.index.php");
+  exit();
+}
 include "config.php";
 include "class/DisplayFunctions.class.php";
 $submit='id=submit type=submit name="action"';
