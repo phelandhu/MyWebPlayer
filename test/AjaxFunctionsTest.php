@@ -36,11 +36,11 @@ class AjaxFunctionsTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testSetVolume() {
-		echo $this->_ajaxFunctions->setVolume(50);
+		$this->assertEquals("done volume 50, 1 \" \"\n", $this->_ajaxFunctions->setVolume(50));
 	}
-/*	
+
 	public function testConvertCommand() {
 		$this->assertEquals("pt_step -1", $this->_ajaxFunctions->convertCommand("pt_step-1"));
 	}
-*/
+
 }

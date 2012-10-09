@@ -11,17 +11,17 @@ class Util {
 		return $args;
 	}
 	
-	static function logArray($arrIn) {
+	static function logArray($arrIn, $filePath = "/tmp/log.txt") {
 		ob_start(); //Start buffering
 		print_r($arrIn); //print the result
 		$output = ob_get_contents(); //get the result from buffer
 		ob_end_clean();
-		$result = file_put_contents ( "/tmp/log.txt", file_get_contents ( "/tmp/log.txt") . $output . "\n");
+		$result = file_put_contents ( $filePath, file_get_contents ( $filePath) . $output . "\n");
 		return $result;
 	}
 	
-	static function log($strIn) {
-		$result = file_put_contents ( "/tmp/log.txt", file_get_contents ( "/tmp/log.txt") . $strIn . "\n");
+	static function log($strIn, $filePath = "/tmp/log.txt") {
+		$result = file_put_contents ( $filePath, file_get_contents ( $filePath) . $strIn . "\n");
 		return $result;
 	}
 }
