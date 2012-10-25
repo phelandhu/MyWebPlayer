@@ -1,7 +1,6 @@
 <?php
 include_once "common/includes/Browser.php";
 $browser = new Browser();
-
 switch ($browser->getBrowser()) {
 	case Browser::BROWSER_OPERA_MINI:
 	case Browser::BROWSER_IPAD:
@@ -17,5 +16,4 @@ switch ($browser->getBrowser()) {
 		break;
 		
 }
-
 echo $browser->getBrowser();
